@@ -1,0 +1,134 @@
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2937;
+}
+
+header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.panel-header {
+  margin-bottom: 1rem;
+}
+
+.customer-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.customer-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.customer-form input {
+  padding: 0.9rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.customer-form span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+button {
+  padding: 0.9rem 1.3rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background-color: #2563eb;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+button.secondary {
+  background-color: #f3f4f6;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+button.secondary:hover {
+  background-color: #e5e7eb;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+thead th {
+  text-align: left;
+  padding: 0.9rem 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+  color: #111827;
+}
+
+tbody td {
+  padding: 0.9rem 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.message.success {
+  background-color: #ecfdf5;
+  color: #166534;
+}
+
+.message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+footer {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-align: center;
+}
