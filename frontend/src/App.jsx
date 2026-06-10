@@ -1,242 +1,117 @@
+import StatusPage from './pages/StatusPage'
+import UserPage from './pages/UserPage'
 import { useEffect, useState } from 'react'
 import './App.css'
+import LoginScreen from './components/LoginScreen'
+import Layout from './components/Layout'
+import CustomerPage from './pages/CustomerPage'
 
-const API_URL = 'http://localhost:8080/api/customers'
-const STATUS_URL = 'http://localhost:8080/api/statuses'
+const LOGIN_URL = 'http://localhost:8080/api/login'
+const ME_URL = 'http://localhost:8080/api/me'
+const LOGOUT_URL = 'http://localhost:8080/api/logout'
 
 function App() {
-  const [customers, setCustomers] = useState([])
-  const [statuses, setStatuses] = useState([])
-  const [form, setForm] = useState({ name: '', email: '', phone: '', statusCode: 'ST01' })
-  const [editingId, setEditingId] = useState(null)
-  const [message, setMessage] = useState('')
+  const [loginUser, setLoginUser] = useState(null)
+  const [checkingLogin, setCheckingLogin] = useState(true)
+  const [selectedMenu, setSelectedMenu] = useState('customers')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    loadCustomers()
-    loadStatuses()
+    checkLogin()
   }, [])
 
-  async function loadCustomers() {
-    setLoading(true)
-    setError('')
+  async function checkLogin() {
     try {
-      const response = await fetch(API_URL)
-      if (!response.ok) throw new Error('顧客一覧の取得に失敗しました')
-      const data = await response.json()
-      setCustomers(data)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function loadStatuses() {
-    try {
-      const response = await fetch(STATUS_URL)
-      if (!response.ok) throw new Error('ステータス一覧の取得に失敗しました')
-      const data = await response.json()
-      setStatuses(data)
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
-  function resetForm() {
-    setForm({ name: '', email: '', phone: '', statusCode: 'ST01' })
-    setEditingId(null)
-    setMessage('')
-    setError('')
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setError('')
-    setMessage('')
-
-    if (!form.name.trim()) {
-      setError('名前は必須です')
-      return
-    }
-
-    try {
-      const method = editingId ? 'PUT' : 'POST'
-      const url = editingId ? `${API_URL}/${editingId}` : API_URL
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+      const response = await fetch(ME_URL, {
+        credentials: 'include',
       })
 
-      if (!response.ok) {
-        const errorBody = await response.text()
-        throw new Error(errorBody || '保存に失敗しました')
-      }
+      const data = await response.json()
 
-      const result = await response.json()
-      setMessage(editingId ? '顧客情報を更新しました' : '顧客を登録しました')
-      if (editingId) {
-        setCustomers(customers.map((item) => (item.id === editingId ? result : item)))
+      if (data.login) {
+        setLoginUser(data)
       } else {
-        setCustomers([...customers, result])
+        setLoginUser(null)
       }
-      resetForm()
     } catch (err) {
-      setError(err.message)
+      setLoginUser(null)
+    } finally {
+      setCheckingLogin(false)
     }
   }
 
-  function handleEdit(customer) {
-    setEditingId(customer.id)
-    setForm({
-      name: customer.name ?? '',
-      email: customer.email ?? '',
-      phone: customer.phone ?? '',
-      statusCode: customer.statusCode ?? 'ST01',
-    })
-    setMessage('編集モードです')
+  async function handleLogin(id, password) {
     setError('')
-  }
 
-  async function handleDelete(id) {
-    if (!window.confirm('この顧客を削除しますか？')) return
-    setError('')
     try {
-      const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
-      if (!response.ok) throw new Error('削除に失敗しました')
-      setCustomers(customers.filter((item) => item.id !== id))
-      setMessage('顧客を削除しました')
-      if (editingId === id) resetForm()
+      const response = await fetch(LOGIN_URL, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, password }),
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        setError(data.message || 'ログインに失敗しました')
+        return
+      }
+
+      setLoginUser({
+        login: true,
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        role: data.role
+      })
     } catch (err) {
-      setError(err.message)
+      setError('ログイン処理でエラーが発生しました')
     }
+  }
+
+  async function handleLogout() {
+    await fetch(LOGOUT_URL, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    setLoginUser(null)
+    setSelectedMenu('customers')
+  }
+
+  function handleUnauthorized() {
+    setLoginUser(null)
+    setError('ログインしてください')
+  }
+
+  if (checkingLogin) {
+    return <div className="container">ログイン状態を確認中...</div>
+  }
+
+  if (!loginUser) {
+    return <LoginScreen onLogin={handleLogin} error={error} />
   }
 
   return (
-    <div className="container">
-      <header>
-        <h1>Customer Management System</h1>
-      </header>
+    <Layout
+      loginUser={loginUser}
+      selectedMenu={selectedMenu}
+      setSelectedMenu={setSelectedMenu}
+      onLogout={handleLogout}
+    >
+      {selectedMenu === 'customers' && (
+        <CustomerPage onUnauthorized={handleUnauthorized} />
+      )}
 
-      <section className="panel">
-        <div className="panel-header">
-          <h2>{editingId ? '顧客情報を編集' : '顧客登録'}</h2>
-        </div>
+      {selectedMenu === 'users' && (
+        <UserPage onUnauthorized={handleUnauthorized} />
+      )}
 
-        <form className="customer-form" onSubmit={handleSubmit}>
-          <label>
-            名前<span>（必須）</span>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="名前を入力してください"
-            />
-          </label>
-          <label>
-            メール
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="メールアドレスを入力してください"
-            />
-          </label>
-          <label>
-            電話番号
-            <input
-              type="text"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder="電話番号を入力してください"
-            />
-          </label>
-          <label>
-            ステータス
-            <select
-              value={form.statusCode}
-              onChange={(e) => setForm({ ...form, statusCode: e.target.value })}
-            >
-              {statuses.length === 0 ? (
-                <option value="ST01">読み込み中...</option>
-              ) : (
-                statuses.map((status) => (
-                  <option key={status.statusCode} value={status.statusCode}>
-                    {status.statusName}
-                  </option>
-                ))
-              )}
-            </select>
-          </label>
-
-          <div className="form-actions">
-            <button type="submit">{editingId ? '更新' : '登録'}</button>
-            {editingId && (
-              <button type="button" className="secondary" onClick={resetForm}>
-                キャンセル
-              </button>
-            )}
-          </div>
-        </form>
-
-        {message && <div className="message success">{message}</div>}
-        {error && <div className="message error">{error}</div>}
-      </section>
-
-      <section className="panel">
-        <div className="panel-header">
-          <h2>顧客一覧</h2>
-        </div>
-
-        {loading ? (
-          <p>読み込み中...</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>名前</th>
-                <th>メール</th>
-                <th>電話番号</th>
-                <th>ステータス</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.length === 0 ? (
-                <tr>
-                  <td colSpan="6">顧客が存在しません</td>
-                </tr>
-              ) : (
-                customers.map((customer) => (
-                  <tr key={customer.id}>
-                    <td>{customer.id}</td>
-                    <td>{customer.name}</td>
-                    <td>{customer.email ?? '-'}</td>
-                    <td>{customer.phone ?? '-'}</td>
-                    <td>{customer.statusName ?? '-'}</td>
-                    <td className="actions">
-                      <button type="button" onClick={() => handleEdit(customer)}>
-                        編集
-                      </button>
-                      <button type="button" className="secondary" onClick={() => handleDelete(customer.id)}>
-                        削除
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      <footer>
-        <small>バックエンド API: {API_URL}</small>
-      </footer>
-    </div>
+      {selectedMenu === 'statuses' && (
+        <StatusPage onUnauthorized={handleUnauthorized} />
+      )}
+    </Layout>
   )
 }
 

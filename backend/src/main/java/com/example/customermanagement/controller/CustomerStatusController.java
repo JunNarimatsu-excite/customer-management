@@ -1,25 +1,38 @@
 package com.example.customermanagement.controller;
 
 import com.example.customermanagement.model.CustomerStatusName;
-import com.example.customermanagement.repository.CustomerStatusNameRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.customermanagement.service.CustomerStatusNameService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/statuses")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@RequiredArgsConstructor
 public class CustomerStatusController {
 
-    @Autowired
-    private CustomerStatusNameRepository statusNameRepository;
+    private final CustomerStatusNameService service;
 
     @GetMapping
     public List<CustomerStatusName> getAllStatuses() {
-        return statusNameRepository.findAll();
+        return service.findAll();
+    }
+
+    @PostMapping
+    public CustomerStatusName createStatus(@RequestBody CustomerStatusName status) {
+        return service.create(status);
+    }
+
+    @PutMapping("/{statusCode}")
+    public CustomerStatusName updateStatus(
+            @PathVariable String statusCode,
+            @RequestBody CustomerStatusName status) {
+        return service.update(statusCode, status);
+    }
+
+    @DeleteMapping("/{statusCode}")
+    public void deleteStatus(@PathVariable String statusCode) {
+        service.delete(statusCode);
     }
 }
