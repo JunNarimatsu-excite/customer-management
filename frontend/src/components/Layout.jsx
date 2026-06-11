@@ -3,6 +3,16 @@ function Layout({ loginUser, selectedMenu, setSelectedMenu, onLogout, children }
         <div className="app-layout">
             <aside className="sidebar">
                 <h2>メニュー</h2>
+                <button
+                    className={
+                        selectedMenu === 'dashboard'
+                        ? 'menu active'
+                        : 'menu'
+                    }
+                    onClick={() => setSelectedMenu('dashboard')}
+                    >
+                    ダッシュボード
+                </button>
 
                 <button
                     className={selectedMenu === 'customers' ? 'menu active' : 'menu'}
@@ -25,6 +35,17 @@ function Layout({ loginUser, selectedMenu, setSelectedMenu, onLogout, children }
                             onClick={() => setSelectedMenu('statuses')}
                         >
                         ステータス管理
+                        </button>
+
+                        <button
+                            className={
+                                selectedMenu === 'auditLogs'
+                                ? 'menu active'
+                                : 'menu'
+                            }
+                            onClick={() => setSelectedMenu('auditLogs')}
+                        >
+                        監査ログ
                         </button>
                     </>
                 )}

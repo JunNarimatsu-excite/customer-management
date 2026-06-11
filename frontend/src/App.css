@@ -188,3 +188,14 @@ footer {
   padding: 32px;
   overflow: auto;
 }
+
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pagination button {
+  min-width: 80px;
+}
