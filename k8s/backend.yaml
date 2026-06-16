@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+type: Opaque
+stringData:
+  DB_PASSWORD: "Password!"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  DB_URL: "jdbc:postgresql://customer-management-db.postgres.database.azure.com:5432/customerdb?sslmode=require"
+  DB_USERNAME: "postgre_admin"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-backend
+  template:
+    metadata:
+      labels:
+        app: customer-backend
+    spec:
+      containers:
+        - name: customer-backend
+          image: customer-backend:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-backend
+spec:
+  selector:
+    app: customer-backend
+  ports:
+    - port: 8080
+      targetPort: 8080

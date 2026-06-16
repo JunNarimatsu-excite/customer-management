@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const USER_URL = 'http://localhost:8080/api/users'
+const USER_URL = 'http://20.196.152.70:30081/api/users'
 
 function UserPage({ onUnauthorized }) {
   const [users, setUsers] = useState([])

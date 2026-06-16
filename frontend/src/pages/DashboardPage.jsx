@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const DASHBOARD_URL = 'http://localhost:8080/api/dashboard'
+const DASHBOARD_URL = 'http://20.196.152.70:30081/api/dashboard'
 
 function DashboardPage({ onUnauthorized, loginUser }) {
 

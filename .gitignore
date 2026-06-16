@@ -22,3 +22,10 @@ backend/*.log
 
 # OS
 Thumbs.db
+
+# Docker image archives
+*.tar
+
+# Build outputs
+frontend/dist/
+backend/target/

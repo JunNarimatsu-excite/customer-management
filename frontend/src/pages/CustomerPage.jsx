@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-const API_URL = 'http://localhost:8080/api/customers'
-const STATUS_URL = 'http://localhost:8080/api/customers/statuses'
+const API_URL = 'http://20.196.152.70:30081/api/customers'
+const STATUS_URL = 'http://20.196.152.70:30081/api/customers/statuses'
 
 function CustomerPage({ onUnauthorized }) {
   const [customers, setCustomers] = useState([])

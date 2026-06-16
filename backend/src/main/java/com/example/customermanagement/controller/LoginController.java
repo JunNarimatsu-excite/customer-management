@@ -12,7 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://20.196.152.70:30080", allowCredentials = "true")
 public class LoginController {
 
     private final LoginService loginService;

@@ -8,9 +8,9 @@ import Layout from './components/Layout'
 import CustomerPage from './pages/CustomerPage'
 import AuditLogPage from './pages/AuditLogPage'
 
-const LOGIN_URL = 'http://localhost:8080/api/login'
-const ME_URL = 'http://localhost:8080/api/me'
-const LOGOUT_URL = 'http://localhost:8080/api/logout'
+const LOGIN_URL = 'http://20.196.152.70:30081/api/login'
+const ME_URL = 'http://20.196.152.70:30081/api/me'
+const LOGOUT_URL = 'http://20.196.152.70:30081/api/logout'
 
 function App() {
   const [loginUser,     setLoginUser]     = useState(null)

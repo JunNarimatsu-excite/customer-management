@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const STATUS_URL = 'http://localhost:8080/api/statuses'
+const STATUS_URL = 'http://20.196.152.70:30081/api/statuses'
 
 function StatusPage({ onUnauthorized }) {
   const [statuses, setStatuses] = useState([])

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const API_URL = 'http://localhost:8080/api/audit-logs'
+const API_URL = 'http://20.196.152.70:30081/api/audit-logs'
 
 function AuditLogPage({ onUnauthorized }) {
 
