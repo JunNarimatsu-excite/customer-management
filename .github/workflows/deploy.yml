@@ -16,26 +16,26 @@ jobs:
       - name: Build backend image
         run: |
           cd backend
-          docker build --no-cache -t customer-backend:latest .
+          docker build --no-cache -t customer-backend:${{ github.sha }} .
 
       - name: Import backend image to k3s
         run: |
-          docker save customer-backend:latest -o /tmp/customer-backend.tar
+          docker save customer-backend:${{ github.sha }} -o /tmp/customer-backend.tar
           sudo k3s ctr images import /tmp/customer-backend.tar
 
       - name: Build frontend image
         run: |
           cd frontend
-          docker build --no-cache -t customer-frontend:latest .
+          docker build --no-cache -t customer-frontend:${{ github.sha }} .
 
       - name: Import frontend image to k3s
         run: |
-          docker save customer-frontend:latest -o /tmp/customer-frontend.tar
+          docker save customer-frontend:${{ github.sha }} -o /tmp/customer-frontend.tar
           sudo k3s ctr images import /tmp/customer-frontend.tar
 
       - name: Deploy to k3s
         run: |
-          sudo kubectl set image deployment/customer-backend customer-backend=customer-backend:latest
-          sudo kubectl set image deployment/customer-frontend customer-frontend=customer-frontend:latest
+          sudo kubectl set image deployment/customer-backend customer-backend=customer-backend:${{ github.sha }}
+          sudo kubectl set image deployment/customer-frontend customer-frontend=customer-frontend:${{ github.sha }}
           sudo kubectl rollout status deployment/customer-backend
           sudo kubectl rollout status deployment/customer-frontend
