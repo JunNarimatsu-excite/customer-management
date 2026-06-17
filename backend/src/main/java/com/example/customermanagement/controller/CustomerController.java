@@ -101,6 +101,7 @@ public class CustomerController {
         cust.setName(customer.getName());
         cust.setEmail(customer.getEmail());
         cust.setPhone(customer.getPhone());
+        cust.setImageUrl(customer.getImageUrl());
 
         if (customer.getStatusCode() != null && !customer.getStatusCode().isBlank()) {
             try {
