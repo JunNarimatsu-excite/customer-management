@@ -34,6 +34,9 @@ public class ProcessedCustomer {
     @Column(name = "status_name", nullable = false)
     private String statusName;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @PrePersist
     protected void onCreate() {
         if (processedAt == null) processedAt = LocalDateTime.now();
