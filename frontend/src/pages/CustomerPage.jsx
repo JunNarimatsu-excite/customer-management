@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 
 const API_URL = 'http://20.196.152.70:30081/api/customers'
 const STATUS_URL = 'http://20.196.152.70:30081/api/customers/statuses'
+const BLOB_UPLOAD_URL = 'http://20.196.152.70:30081/api/blob/upload'
 
 function CustomerPage({ onUnauthorized }) {
   const [customers, setCustomers] = useState([])
   const [statuses, setStatuses] = useState([])
-  const [form, setForm] = useState({ name: '', email: '', phone: '', statusCode: 'ST01' })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', statusCode: 'ST01', imageUrl: '' })
+  const [imageFile, setImageFile] = useState(null)
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -94,7 +96,8 @@ function CustomerPage({ onUnauthorized }) {
   }
 
   function resetForm() {
-    setForm({ name: '', email: '', phone: '', statusCode: 'ST01' })
+    setForm({ name: '', email: '', phone: '', statusCode: 'ST01', imageUrl: '' })
+    setImageFile(null)
     setEditingId(null)
     setMessage('')
     setError('')
@@ -111,6 +114,25 @@ function CustomerPage({ onUnauthorized }) {
     }
 
     try {
+      let imageUrl = form.imageUrl
+
+      if (imageFile) {
+        const uploadFormData = new FormData()
+        uploadFormData.append('file', imageFile)
+
+        const uploadResponse = await fetch(BLOB_UPLOAD_URL, {
+          method: 'POST',
+          credentials: 'include',
+          body: uploadFormData,
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error('画像アップロードに失敗しました')
+        }
+
+        imageUrl = await uploadResponse.text()
+      }
+
       const method = editingId ? 'PUT' : 'POST'
       const url = editingId ? `${API_URL}/${editingId}` : API_URL
 
@@ -118,7 +140,7 @@ function CustomerPage({ onUnauthorized }) {
         method,
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, imageUrl }),
       })
 
       if (response.status === 401) {
@@ -153,6 +175,7 @@ function CustomerPage({ onUnauthorized }) {
       email: customer.email ?? '',
       phone: customer.phone ?? '',
       statusCode: customer.statusCode ?? 'ST01',
+      imageUrl: customer.imageUrl ?? '',
     })
     setMessage('編集モードです')
     setError('')
@@ -257,6 +280,21 @@ function CustomerPage({ onUnauthorized }) {
           </label>
 
           <label>
+            顧客画像
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
+          </label>
+
+          {form.imageUrl && (
+            <div>
+              <img src={form.imageUrl} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
+            </div>
+          )}
+
+          <label>
             ステータス
             <select
               value={form.statusCode}
@@ -311,6 +349,21 @@ function CustomerPage({ onUnauthorized }) {
               placeholder="メールで検索"
             />
           </label>
+
+          <label>
+            顧客画像
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
+          </label>
+
+          {form.imageUrl && (
+            <div>
+              <img src={form.imageUrl} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
+            </div>
+          )}
 
           <label>
             ステータス
