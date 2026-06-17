@@ -56,6 +56,7 @@ function DashboardPage({ onUnauthorized, loginUser }) {
         <div className="card">
           <h3>ログインユーザー</h3>
           <p>{loginUser?.name}</p>
+          <p>{loginUser?.role}</p>
         </div>
 
       </div>

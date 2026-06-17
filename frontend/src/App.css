@@ -199,3 +199,27 @@ footer {
 .pagination button {
   min-width: 80px;
 }
+/* 入力欄が横いっぱいに広がりすぎる問題の修正 */
+input,
+select,
+textarea {
+  width: 500px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-section,
+.search-section,
+.condition-section,
+.card,
+.panel {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    width: 100%;
+  }
+}
