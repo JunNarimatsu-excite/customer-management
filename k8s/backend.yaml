@@ -50,6 +50,17 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: DB_PASSWORD
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: azure-blob-secret
+                  key: AZURE_STORAGE_CONNECTION_STRING
+
+            - name: AZURE_STORAGE_CONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: azure-blob-secret
+                  key: AZURE_STORAGE_CONTAINER_NAME
 ---
 apiVersion: v1
 kind: Service
