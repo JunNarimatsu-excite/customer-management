@@ -350,12 +350,6 @@ function CustomerPage({ onUnauthorized }) {
             />
           </label>
 
-          {form.imageUrl && (
-            <div>
-              <img src={`/api/blob/view?url=${encodeURIComponent(form.imageUrl)}`} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
-            </div>
-          )}
-
           <label>
             ステータス
             <select
