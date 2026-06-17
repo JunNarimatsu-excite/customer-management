@@ -290,7 +290,7 @@ function CustomerPage({ onUnauthorized }) {
 
           {form.imageUrl && (
             <div>
-              <img src={form.imageUrl} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
+              <img src={`/api/blob/view?url=${encodeURIComponent(form.imageUrl)}`} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
             </div>
           )}
 
@@ -350,18 +350,9 @@ function CustomerPage({ onUnauthorized }) {
             />
           </label>
 
-          <label>
-            顧客画像
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImageFile(e.target.files[0])}
-            />
-          </label>
-
           {form.imageUrl && (
             <div>
-              <img src={form.imageUrl} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
+              <img src={`/api/blob/view?url=${encodeURIComponent(form.imageUrl)}`} alt="顧客画像" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
             </div>
           )}
 
