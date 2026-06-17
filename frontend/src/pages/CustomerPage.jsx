@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const API_URL = 'http://20.196.152.70:30081/api/customers'
 const STATUS_URL = 'http://20.196.152.70:30081/api/customers/statuses'
-const BLOB_UPLOAD_URL = 'http://20.196.152.70:30081/api/blob/upload'
+const BLOB_UPLOAD_URL = '/api/blob/upload'
 
 function CustomerPage({ onUnauthorized }) {
   const [customers, setCustomers] = useState([])
