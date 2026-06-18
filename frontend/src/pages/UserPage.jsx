@@ -9,6 +9,7 @@ function UserPage({ onUnauthorized }) {
     name: '',
     email: '',
     password: '',
+    role: 'USER',
   })
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
@@ -55,6 +56,7 @@ function UserPage({ onUnauthorized }) {
       name: '',
       email: '',
       password: '',
+      role: 'USER',
     })
     setEditingId(null)
     setMessage('')
@@ -78,6 +80,11 @@ function UserPage({ onUnauthorized }) {
 
     if (!form.email.trim()) {
       setError('メールは必須です')
+      return
+    }
+
+    if (!form.role.trim()) {
+      setError('ロールは必須です')
       return
     }
 
@@ -137,6 +144,7 @@ function UserPage({ onUnauthorized }) {
       name: user.name ?? '',
       email: user.email ?? '',
       password: '',
+      role: user.role ?? 'USER',
     })
     setMessage('編集モードです。パスワードは変更する場合のみ入力してください。')
     setError('')
@@ -221,6 +229,17 @@ function UserPage({ onUnauthorized }) {
           </label>
 
           <label>
+            ロール<span>（必須）</span>
+            <select
+              value={form.role}
+              onChange={(e) => setForm({ ...form, role: e.target.value })}
+            >
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </label>
+
+          <label>
             パスワード{editingId ? '（変更する場合のみ）' : '（必須）'}
             <input
               type="password"
@@ -259,6 +278,7 @@ function UserPage({ onUnauthorized }) {
                 <th>ID</th>
                 <th>名前</th>
                 <th>メール</th>
+                <th>ロール</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -266,7 +286,7 @@ function UserPage({ onUnauthorized }) {
             <tbody>
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan="4">ユーザーが存在しません</td>
+                  <td colSpan="5">ユーザーが存在しません</td>
                 </tr>
               ) : (
                 users.map((user) => (
@@ -274,6 +294,7 @@ function UserPage({ onUnauthorized }) {
                     <td>{user.id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
+                    <td>{user.role ?? '-'}</td>
                     <td className="actions">
                       <button type="button" onClick={() => handleEdit(user)}>
                         編集
