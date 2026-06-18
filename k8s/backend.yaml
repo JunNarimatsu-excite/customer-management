@@ -61,6 +61,12 @@ spec:
                 secretKeyRef:
                   name: azure-blob-secret
                   key: AZURE_STORAGE_CONTAINER_NAME
+
+            - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: appinsights-secret
+                  key: APPLICATIONINSIGHTS_CONNECTION_STRING
 ---
 apiVersion: v1
 kind: Service
