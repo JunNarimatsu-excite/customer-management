@@ -41,12 +41,15 @@ h1 {
   font-weight: 600;
 }
 
-.customer-form input {
+.customer-form input,
+.customer-form select {
   padding: 0.9rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 10px;
   font-size: 1rem;
   width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;
 }
 
 .customer-form span {

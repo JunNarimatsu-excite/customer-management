@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(
                         "/api/users/**",
                         "/api/statuses/**",
-                        "/api/audit-logs"
+                        "/api/audit-logs/**"
                 );
     }
 }
