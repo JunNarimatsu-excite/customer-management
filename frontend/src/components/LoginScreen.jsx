@@ -32,7 +32,7 @@ function LoginScreen({ onLogin, error }) {
           </label>
 
           <div className="form-actions">
-            <button type="submit">ログイン</button>
+            <button type="submit" className="primary">ログイン</button>
           </div>
         </form>
 
