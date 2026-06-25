@@ -216,7 +216,12 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
           </label>
 
           <div className="form-actions">
-            <button type="submit">検索</button>
+            <button
+              type="submit"
+              className="primary"
+            >
+              検索
+            </button>
             <button
               type="button"
               className="secondary"
@@ -270,13 +275,18 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
       <section className="panel">
         <div className="panel-header">
           <h2>顧客一覧</h2>
-          <button type="button" onClick={onCreate}>
+          <button
+            type="button"
+            className="primary"
+            onClick={onCreate}
+          >
             顧客登録
           </button>
         </div>
 
         <div className="pagination">
           <button
+            className="navigation"
             disabled={page === 0}
             onClick={() => setPage(page - 1)}
           >
@@ -288,6 +298,7 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
           </span>
 
           <button
+            className="navigation"
             disabled={page + 1 >= totalPages}
             onClick={() => setPage(page + 1)}
           >
@@ -326,13 +337,14 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
                     <td className="actions">
                       <button
                         type="button"
+                        className="primary"
                         onClick={() => onEdit(customer.id)}
                       >
                         編集
                       </button>
                       <button
                         type="button"
-                        className="secondary"
+                        className="danger"
                         onClick={() => handleDelete(customer.id)}
                       >
                         削除
@@ -347,6 +359,7 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
 
         <div className="pagination">
           <button
+            className="navigation"
             disabled={page === 0}
             onClick={() => setPage(page - 1)}
           >
@@ -358,6 +371,7 @@ function CustomerPage({ onUnauthorized, onCreate, onEdit, message, clearMessage 
           </span>
 
           <button
+            className="navigation"
             disabled={page + 1 >= totalPages}
             onClick={() => setPage(page + 1)}
           >

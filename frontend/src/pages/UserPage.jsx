@@ -250,7 +250,7 @@ function UserPage({ onUnauthorized }) {
           </label>
 
           <div className="form-actions">
-            <button type="submit">{editingId ? '更新' : '登録'}</button>
+            <button type="submit" className="primary">{editingId ? '更新' : '登録'}</button>
 
             {editingId && (
               <button type="button" className="secondary" onClick={resetForm}>
@@ -296,13 +296,13 @@ function UserPage({ onUnauthorized }) {
                     <td>{user.email}</td>
                     <td>{user.role ?? '-'}</td>
                     <td className="actions">
-                      <button type="button" onClick={() => handleEdit(user)}>
+                      <button type="button" className="primary" onClick={() => handleEdit(user)}>
                         編集
                       </button>
 
                       <button
                         type="button"
-                        className="secondary"
+                        className="danger"
                         onClick={() => handleDelete(user.id)}
                       >
                         削除

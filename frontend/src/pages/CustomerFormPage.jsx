@@ -243,7 +243,7 @@ function CustomerFormPage({ customerId, onUnauthorized, onCompleted, onCancel })
           </label>
 
           <div className="form-actions">
-            <button type="submit" disabled={loading}>
+            <button type="submit" className="primary" disabled={loading}>
               {isEditMode ? '更新' : '登録'}
             </button>
 

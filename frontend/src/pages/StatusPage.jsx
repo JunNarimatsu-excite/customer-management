@@ -167,7 +167,7 @@ function StatusPage({ onUnauthorized }) {
           </label>
 
           <div className="form-actions">
-            <button type="submit">{editingCode ? '更新' : '登録'}</button>
+            <button type="submit" className="primary">{editingCode ? '更新' : '登録'}</button>
 
             {editingCode && (
               <button type="button" className="secondary" onClick={resetForm}>
@@ -201,12 +201,12 @@ function StatusPage({ onUnauthorized }) {
                 <td>{status.statusCode}</td>
                 <td>{status.statusName}</td>
                 <td className="actions">
-                  <button type="button" onClick={() => handleEdit(status)}>
+                  <button type="button" className="primary" onClick={() => handleEdit(status)}>
                     編集
                   </button>
                   <button
                     type="button"
-                    className="secondary"
+                    className="danger"
                     onClick={() => handleDelete(status.statusCode)}
                   >
                     削除
