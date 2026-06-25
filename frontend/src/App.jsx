@@ -6,6 +6,7 @@ import './App.css'
 import LoginScreen from './components/LoginScreen'
 import Layout from './components/Layout'
 import CustomerPage from './pages/CustomerPage'
+import CustomerFormPage from './pages/CustomerFormPage'
 import AuditLogPage from './pages/AuditLogPage'
 
 const LOGIN_URL = 'http://20.196.152.70:30081/api/login'
@@ -13,10 +14,12 @@ const ME_URL = 'http://20.196.152.70:30081/api/me'
 const LOGOUT_URL = 'http://20.196.152.70:30081/api/logout'
 
 function App() {
-  const [loginUser,     setLoginUser]     = useState(null)
+  const [loginUser, setLoginUser] = useState(null)
   const [checkingLogin, setCheckingLogin] = useState(true)
-  const [selectedMenu,  setSelectedMenu]  = useState('dashboard')
-  const [error,         setError]         = useState('')
+  const [selectedMenu, setSelectedMenu] = useState('dashboard')
+  const [editingCustomerId, setEditingCustomerId] = useState(null)
+  const [customerMessage, setCustomerMessage] = useState('')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     checkLogin()
@@ -65,7 +68,7 @@ function App() {
         id: data.id,
         name: data.name,
         email: data.email,
-        role: data.role
+        role: data.role,
       })
     } catch (err) {
       setError('ログイン処理でエラーが発生しました')
@@ -80,11 +83,36 @@ function App() {
 
     setLoginUser(null)
     setSelectedMenu('dashboard')
+    setEditingCustomerId(null)
+    setCustomerMessage('')
   }
 
   function handleUnauthorized() {
     setLoginUser(null)
     setError('ログインしてください')
+  }
+
+  function openCustomerCreate() {
+    setEditingCustomerId(null)
+    setCustomerMessage('')
+    setSelectedMenu('customerForm')
+  }
+
+  function openCustomerEdit(customerId) {
+    setEditingCustomerId(customerId)
+    setCustomerMessage('')
+    setSelectedMenu('customerForm')
+  }
+
+  function completeCustomerForm(message) {
+    setCustomerMessage(message)
+    setEditingCustomerId(null)
+    setSelectedMenu('customers')
+  }
+
+  function backToCustomers() {
+    setEditingCustomerId(null)
+    setSelectedMenu('customers')
   }
 
   if (checkingLogin) {
@@ -110,7 +138,22 @@ function App() {
       )}
 
       {selectedMenu === 'customers' && (
-        <CustomerPage onUnauthorized={handleUnauthorized} />
+        <CustomerPage
+          onUnauthorized={handleUnauthorized}
+          onCreate={openCustomerCreate}
+          onEdit={openCustomerEdit}
+          message={customerMessage}
+          clearMessage={() => setCustomerMessage('')}
+        />
+      )}
+
+      {selectedMenu === 'customerForm' && (
+        <CustomerFormPage
+          customerId={editingCustomerId}
+          onUnauthorized={handleUnauthorized}
+          onCompleted={completeCustomerForm}
+          onCancel={backToCustomers}
+        />
       )}
 
       {selectedMenu === 'users' && (
